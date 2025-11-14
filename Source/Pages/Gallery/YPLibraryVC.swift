@@ -161,20 +161,20 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     @objc
     func multipleSelectionButtonTapped() {
-        // If no items, than preventing multiple selection
-        guard mediaManager.hasResultItems else {
-            if #available(iOS 14, *) {
-                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
-            }
-
-            return
-        }
-
         doAfterLibraryPermissionCheck { [weak self] in
-            if self?.isMultipleSelectionEnabled == false {
-                self?.selectedItems.removeAll()
+            guard let self = self else { return }
+            // If no items, than preventing multiple selection
+            guard mediaManager.hasResultItems else {
+                if #available(iOS 14, *) {
+                    PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+                }
+
+                return
             }
-            self?.toggleMultipleSelection()
+            if self.isMultipleSelectionEnabled == false {
+                self.selectedItems.removeAll()
+            }
+            self.toggleMultipleSelection()
         }
     }
     
